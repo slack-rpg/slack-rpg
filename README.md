@@ -31,6 +31,9 @@ Non-Player Characters (NPCs) are characters controlled by the Dungeon Master. Th
 Monsters are NPCs that are hostile toward players. They can be defeated for experience during battles.
 
 ## Battles
+## Add-Ons
+Add-ons are packs of Monsters, Locations, Weapons, Names etc that can be included to enhance your game. See [slack-rpg/addon-official](https://github.com/slack-rpg/addon-official) for more details.
+
 ## Install
 1. Clone this [repository](https://github.com/shaunburdick/slack-rpg.git)
 2. `npm install`
@@ -43,6 +46,9 @@ Monsters are NPCs that are hostile toward players. They can be defeated for expe
 
 ## config.js
 The config file should be filled out as follows:
+- app:
+  - addons: string, a comma separated list of addons to load (defaults to 'slack-rpg/addon-official')
+
 - slack:
   - token: string, Your slack token
   - autoReconnect: boolean, Reconnect on disconnect
@@ -54,6 +60,7 @@ Official Image [shaunburdick/slack-rpg](https://registry.hub.docker.com/u/shaunb
 
 ### Configuration Environment Variables
 You can set the configuration of the bot by using environment variables. _ENVIRONMENT_VARIABLE_=Default Value
+- _APP_ADDONS_='slack-rpg/addon-official', a comma separated list of addons to load
 - _SLACK_TOKEN_=xoxb-foo, Your Slack Token
 - _SLACK_AUTO_RECONNECT_=true, Reconnect on disconnect
 
