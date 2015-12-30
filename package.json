@@ -1,0 +1,41 @@
+{
+  "name": "slack-rpg",
+  "version": "0.0.1",
+  "description": "Slackbot RPG Master",
+  "main": "app.js",
+  "private": true,
+  "scripts": {
+    "start": "node app.js",
+    "test": "npm run unit",
+    "unit": "faucet",
+    "lint": "eslint .",
+    "coverage": "istanbul cover --include-all-sources tape test/*.test.js"
+  },
+  "author": "Shaun Burdick <github@shaunburdick.com>",
+  "homepage": "http://github.com/shaunburdick/slack-rpg",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/shaunburdick/slack-rpg.git"
+  },
+  "license": "ISC",
+  "engine": {
+    "node": "^5.1.0"
+  },
+  "dependencies": {
+    "adm-zip": "^0.4.7",
+    "botkit": "0.0.4",
+    "istanbul": "^0.4.1",
+    "moment": "^2.10.3",
+    "redact-object": "^1.0.1",
+    "request": "^2.67.0",
+    "slack-rpg-addon-validator": "^1.0.4",
+    "winston": "^2.1.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^4.1.6",
+    "blue-tape": "^0.1.11",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^2.1.1",
+    "faucet": "0.0.1"
+  }
+}
