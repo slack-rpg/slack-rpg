@@ -1,5 +1,5 @@
 # Slack RPG
-[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)
+[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)[![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
 
 This slack bot will run an RPG inside your slack instance.
 
