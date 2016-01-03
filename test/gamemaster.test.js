@@ -22,10 +22,9 @@ test('Game Master: Should parse dice commands', (assert) => {
 test('Game Master: Should roll dice', (assert) => {
   const gm = new GameMaster('foo');
 
-  assert.ok(gm.roll('foo', '1d4'), 'Roll a 1d4');
-
-  assert.throws(gm.roll.bind(null), /Invalid playerId: undefined/, 'Throw when missing playerId');
-  assert.throws(gm.roll.bind(gm, 'foo'), /Empty or Non\-String Dice Command/, 'Pass through dice parsing errors');
+  assert.ok(gm.roll('1d4'), 'Roll a 1d4');
+  assert.throws(gm.roll.bind(gm), /Empty or Non\-String Dice Command/, 'Pass through dice parsing errors');
+  assert.throws(gm.roll.bind(gm, 'foo'), /Invalid Dice Command: foo/, 'Pass through dice parsing errors');
 
   assert.end();
 });
@@ -84,6 +83,28 @@ test('Game Master: Should parse commands', (assert) => {
     'Parse a roll command (roll 1d6)'
   );
 
+  assert.deepEqual(
+    gm.parseCommands('roll 1d4+1'),
+    [
+      {
+        command: gm.commands.roll,
+        args: ['1d4+1'],
+      },
+    ],
+    'Parse a roll command (roll 1d4+1)'
+  );
+
+  assert.deepEqual(
+    gm.parseCommands('roll 1d10-3'),
+    [
+      {
+        command: gm.commands.roll,
+        args: ['1d10-3'],
+      },
+    ],
+    'Parse a roll command (roll 1d10-3)'
+  );
+
   assert.end();
 });
 
@@ -92,15 +113,49 @@ test('Game Master: Execute Commands', (assert) => {
 
   const gm = new GameMaster('foo');
 
+  gm.command('foo').then(() => {
+    assert.fail('Foo should not parse into a command');
+  }, (error) => {
+    assert.equal(error.message, 'No commands found: undefined', 'Reject promise when no commands found.');
+  });
+
   gm.command('foo', 'foo').then(() => {
     assert.fail('Foo should not parse into a command');
   }, (error) => {
-    assert.ok(error, 'Reject promise when no commands found.');
+    assert.equal(error.message, 'No commands found: foo', 'Reject promise when invalid commands found.');
   });
+});
+
+
+test('Game Master: Execute Command Roll', (assert) => {
+  assert.plan(3);
+
+  const gm = new GameMaster('foo');
 
   gm.command('foo', 'roll 1d6').then((responses) => {
-    assert.equal(responses.length, 1, 'Parse \'roll 1d6\' into a single response');
+    assert.ok(
+      /^1d6: \d+ \(Pure: \d+ \[[1-6]\]\)$/.test(responses[0].message),
+      `Parse 'roll 1d6' into a single response (${responses[0].message})`
+    );
   }, (error) => {
     assert.fail(`Error parsing 'roll 1d6': ${error.message}`);
+  });
+
+  gm.command('foo', 'roll 1d4+1').then((responses) => {
+    assert.ok(
+      /^1d4\+1: \d+ \(Pure: \d+ \[[1-4]\]\)$/.test(responses[0].message),
+      `Parse 'roll 1d4+1' into a single response (${responses[0].message})`
+    );
+  }, (error) => {
+    assert.fail(`Error parsing 'roll 1d4+1': ${error.message}`);
+  });
+
+  gm.command('foo', 'roll 2d4-1').then((responses) => {
+    assert.ok(
+      /^2d4-1: \d+ \(Pure: \d+ \[[1-4], [1-4]\]\)$/.test(responses[0].message),
+      `Parse 'roll 2d4-1' into a single response (${responses[0].message})`
+    );
+  }, (error) => {
+    assert.fail(`Error parsing 'roll 2d4-1': ${error.message}`);
   });
 });

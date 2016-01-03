@@ -69,7 +69,7 @@ test('Addon::parse', (assert) => {
 });
 
 test('Addon::fetch', (assert) => {
-  assert.plan(2);
+  assert.plan(3);
 
   Addon.fetch('slack-rpg/addon-official').then((addons) => {
     assert.ok(addons, 'Fetch slack-rpg/addon-official');
@@ -80,7 +80,13 @@ test('Addon::fetch', (assert) => {
   Addon.fetch('not/real').then(() => {
     assert.fail('Invalid repo should not have succeeded');
   }, (error) => {
-    assert.ok(error, 'Addon should reject unknown repo');
+    assert.equal(error.message, 'GitHub responded with: 404', 'Addon should reject unknown repo');
+  });
+
+  Addon.fetch('parsefail').then(() => {
+    assert.fail('Invalid repo should not have succeeded');
+  }, (error) => {
+    assert.equal(error.message, 'Invalid Addon Name: parsefail', 'Addon should pass through parse errors');
   });
 });
 
