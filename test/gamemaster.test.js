@@ -29,3 +29,78 @@ test('Game Master: Should roll dice', (assert) => {
 
   assert.end();
 });
+
+test('Game Master: Should load addons', (assert) => {
+  assert.plan(2);
+  const gm = new GameMaster('foo');
+
+  gm.loadAddons('slack-rpg/addon-official').then((addons) => {
+    assert.ok(addons, 'Load slack-rpg/addon-official');
+  }, (error) => {
+    assert.fail(`Official Repo should fetch correctly: ${error.message}`);
+  });
+
+  gm.loadAddons('not/real').then(() => {
+    assert.fail('Invalid repo should not have succeeded');
+  }, (error) => {
+    assert.ok(error, 'Game Master should reject unknown repo');
+  });
+});
+
+test('Game Master: Should get loaded namespaces', (assert) => {
+  assert.plan(2);
+  const gm = new GameMaster('foo');
+
+  assert.deepEqual(
+    gm.getAddonNamespaces(),
+    [],
+    'Game Master should have no namespaces until addon(s) are loaded'
+  );
+
+  gm.loadAddons('slack-rpg/addon-official').then(() => {
+    assert.deepEqual(
+      gm.getAddonNamespaces(),
+      ['slack-rpg/addon-official/default'],
+      'Parse an object into namespaces'
+    );
+  }, (error) => {
+    assert.fail(`Official Repo should fetch correctly: ${error.message}`);
+  });
+});
+
+test('Game Master: Should parse commands', (assert) => {
+  const gm = new GameMaster('foo');
+
+  assert.deepEqual(gm.parseCommands(''), [], 'No commands if empty string');
+  assert.deepEqual(gm.parseCommands('foo'), [], 'No commands if have no command');
+  assert.deepEqual(
+    gm.parseCommands('roll 1d6'),
+    [
+      {
+        command: gm.commands.roll,
+        args: ['1d6'],
+      },
+    ],
+    'Parse a roll command (roll 1d6)'
+  );
+
+  assert.end();
+});
+
+test('Game Master: Execute Commands', (assert) => {
+  assert.plan(2);
+
+  const gm = new GameMaster('foo');
+
+  gm.command('foo', 'foo').then(() => {
+    assert.fail('Foo should not parse into a command');
+  }, (error) => {
+    assert.ok(error, 'Reject promise when no commands found.');
+  });
+
+  gm.command('foo', 'roll 1d6').then((responses) => {
+    assert.equal(responses.length, 1, 'Parse \'roll 1d6\' into a single response');
+  }, (error) => {
+    assert.fail(`Error parsing 'roll 1d6': ${error.message}`);
+  });
+});

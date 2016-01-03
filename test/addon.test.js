@@ -77,10 +77,25 @@ test('Addon::fetch', (assert) => {
     assert.fail(`Official Repo should fetch correctly: ${error.message}`);
   });
 
-  Addon.fetch('not/real').then((addons) => {
-    console.dir(addons);
+  Addon.fetch('not/real').then(() => {
     assert.fail('Invalid repo should not have succeeded');
   }, (error) => {
     assert.ok(error, 'Addon should reject unknown repo');
   });
+});
+
+test('Addon::getNamespaces', (assert) => {
+  assert.deepEqual(
+    Addon.getNamespaces({ foo: { bar: { bob: {} } } }),
+    ['foo/bar/bob'],
+    'Parse an object into namespaces'
+  );
+
+  assert.deepEqual(
+    Addon.getNamespaces('foo'),
+    [],
+    'Invalid object should result in no namespaces'
+  );
+
+  assert.end();
 });

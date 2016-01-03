@@ -1,14 +1,36 @@
 # Slack RPG
-[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)[![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
+[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg) [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
 
 This slack bot will run an RPG inside your slack instance.
 
+# TOC
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Features](#features)
+- [Locations](#locations)
+	- [Location Types](#location-types)
+- [Non-Player characters](#non-player-characters)
+- [Monsters](#monsters)
+- [Battles](#battles)
+- [Add-Ons](#add-ons)
+- [Interacting with Bot](#interacting-with-bot)
+	- [Direct Message](#direct-message)
+	- [Mention](#mention)
+		- [Commands](#commands)
+- [Install](#install)
+- [Test](#test)
+- [config.js](#configjs)
+- [Docker](#docker)
+	- [Configuration Environment Variables](#configuration-environment-variables)
+- [Contributing](#contributing)
+
+<!-- /TOC -->
+
 ## Features
 - Each Channel the bot is invited to will become a new location in the game.
-- Each location has certain points of interest (POI)
-- Each point of interest can have non-playable characters (NPC) and/or monsters
+- Each Location can have non-playable characters (NPC) and/or monsters
 - Players can join game and build a character
-- Players can interact with Locations, POIs, NPCs and monsters
+- Players can interact with Locations, NPCs and monsters
 - Players can gain experience interacting with certain things and accomplishing quests
 - Players can search for and find equip-able items
 - Players can challenge other players to become rulers of a location
@@ -16,10 +38,8 @@ This slack bot will run an RPG inside your slack instance.
 ## Locations
 When your GM is invited to a new channel, it will generate a new Location and link it to the channel. Locations will have any number of Points of Interest. When a location is first generated, it will have a NPC ruler of a certain class/level.  When a player reaches that level, they can challenge the NPC to a battle.  If they win they become the new ruler of the location. Other players can challenge  that player to become the new ruler.
 
-## Points of Interest
-Each Location can have any number of Points of Interest (POI).
-
-POI can be of various types:
+### Location Types
+Location can be of various types:
 - **Tavern**: Usually contains NPCs and a quest board
 - **Adventure**: An area of danger and intrigue
 - **Shop**: An area to buy and sell items
@@ -33,6 +53,19 @@ Monsters are NPCs that are hostile toward players. They can be defeated for expe
 ## Battles
 ## Add-Ons
 Add-ons are packs of Monsters, Locations, Weapons, Names etc that can be included to enhance your game. See [slack-rpg/addon-official](https://github.com/slack-rpg/addon-official) for more details.
+
+## Interacting with Bot
+You can interact with the both through Direct Message or mentioning it in a channel.
+
+### Direct Message
+Direct messages are used to have a private conversation with the bot, such as creating a character.
+
+### Mention
+You can give the bot a command by mentioning it: `@bot roll 1d6`
+
+#### Commands
+The bot will respond to the following commands:
+- _roll <dice>_: The bot will randomly roll the dice you specify and respond with the result.
 
 ## Install
 1. Clone this [repository](https://github.com/shaunburdick/slack-rpg.git)
@@ -48,6 +81,8 @@ Add-ons are packs of Monsters, Locations, Weapons, Names etc that can be include
 The config file should be filled out as follows:
 - app:
   - addons: string, a comma separated list of addons to load (defaults to 'slack-rpg/addon-official')
+  - include:
+    - general: boolean, Include the general channel as a location or not
 
 - slack:
   - token: string, Your slack token
@@ -56,11 +91,12 @@ The config file should be filled out as follows:
 ## Docker
 Build an image using `docker build -t your_image:tag`
 
-Official Image [shaunburdick/slack-rpg](https://registry.hub.docker.com/u/shaunburdick/slack-rpg/)
+Official Image [slackrpg/slack-rpg](https://hub.docker.com/r/slackrpg/slack-rpg/)
 
 ### Configuration Environment Variables
 You can set the configuration of the bot by using environment variables. _ENVIRONMENT_VARIABLE_=Default Value
-- _APP_ADDONS_='slack-rpg/addon-official', a comma separated list of addons to load
+- _APP_ADDONS_='slack-rpg/addon-official', a comma separated list of add-ons to load
+- _APP_INCLUDE_GENERAL_=false, Include the general channel as a location
 - _SLACK_TOKEN_=xoxb-foo, Your Slack Token
 - _SLACK_AUTO_RECONNECT_=true, Reconnect on disconnect
 
@@ -69,7 +105,7 @@ Set them using the `-e` flag while running docker:
 ```
 docker run -it \
 -e SLACK_TOKEN=xobo-blarty-blar-blar \
-shaunburdick/slack-rpg:latest
+slackrpg/slack-rpg:latest
 ```
 
 ## Contributing

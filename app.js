@@ -16,6 +16,7 @@ const rawConfig = (() => {
   try {
     retVal = require('./config');
   } catch (exception) {
+    logger.warn('No config file found, loading defaults');
     retVal = require('./config.default');
   }
 

@@ -2,6 +2,7 @@
   "extends": "airbnb/base",
   "rules": {
     "strict": 0,
+    "guard-for-in": 0,
     "valid-jsdoc" : 2
   }
 }
