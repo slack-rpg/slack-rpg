@@ -1,5 +1,5 @@
 # Slack RPG
-[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg) [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
+[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)  [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
 
 This slack bot will run an RPG inside your slack instance.
 
@@ -8,22 +8,24 @@ This slack bot will run an RPG inside your slack instance.
 
 - [Features](#features)
 - [Locations](#locations)
-	- [Location Types](#location-types)
+  - [Location Types](#location-types)
+
 - [Non-Player characters](#non-player-characters)
 - [Monsters](#monsters)
 - [Battles](#battles)
 - [Add-Ons](#add-ons)
 - [Interacting with Bot](#interacting-with-bot)
-	- [Direct Message](#direct-message)
-	- [Mention](#mention)
-		- [Commands](#commands)
+  - [Direct Message](#direct-message)
+  - [Mention](#mention)
+    - [Commands](#commands)
+
 - [Install](#install)
 - [Test](#test)
 - [config.js](#configjs)
 - [Docker](#docker)
-	- [Configuration Environment Variables](#configuration-environment-variables)
-- [Contributing](#contributing)
+  - [Configuration Environment Variables](#configuration-environment-variables)
 
+- [Contributing](#contributing)
 <!-- /TOC -->
 
 ## Features

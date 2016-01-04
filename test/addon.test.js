@@ -1,6 +1,7 @@
 'use strict';
 
 const test = require('blue-tape');
+const Zip = require('adm-zip');
 const Addon = require(process.env.PWD + '/lib/addon');
 
 test('Addon::fetchGitHub', (assert) => {
@@ -26,7 +27,7 @@ test('Addon::fetchGitHub', (assert) => {
 });
 
 test('Addon::extract', (assert) => {
-  assert.plan(4);
+  assert.plan(6);
 
   Addon.extract().then(() => {
     assert.fail('Missing namespace should not have succeeded');
@@ -44,6 +45,70 @@ test('Addon::extract', (assert) => {
     assert.fail('Invalid zip should not have succeeded');
   }, (error) => {
     assert.equal(error.message, 'Zip Error: Invalid filename', 'Addon should reject an invalid zip');
+  });
+
+  // Create an invalid addon zip file
+  const badAddon = new Zip();
+  badAddon.addFile('foo/bar/', '');
+  badAddon.addFile(
+    'foo/bar/names.json',
+    new Buffer(JSON.stringify({
+      'type': 'names',
+      'version': 'v1',
+      'data': {
+        'foo': 'bar', // <- invalid
+        'pre': [''],
+        'name': ['foo'],
+        'sur': [''],
+      },
+    }))
+  );
+
+  Addon.extract(badAddon.toBuffer(), 'foo/bar').then(() => {
+    assert.fail('Invalid zip should not have succeeded');
+  }, (error) => {
+    assert.equal(
+      error.message,
+      'Validation Error: foo/bar/names.json - Schema Validation Errors:\nadditionalProperty "foo" exists in instance when not allowed',
+      'Addon should reject an invalid addon');
+  });
+
+  // Create an duplicate addon zip file
+  const dupAddon = new Zip();
+  dupAddon.addFile('foo/bar/', '');
+  dupAddon.addFile(
+    'foo/bar/names1.json',
+    new Buffer(JSON.stringify({
+      'type': 'names',
+      'version': 'v1',
+      'data': {
+        'pre': [''],
+        'name': ['foo'],
+        'sur': [''],
+      },
+    }))
+  );
+
+  dupAddon.addFile(
+    'foo/bar/names2.json',
+    new Buffer(JSON.stringify({
+      'type': 'names',
+      'version': 'v1',
+      'data': {
+        'pre': [''],
+        'name': ['foo'],
+        'sur': [''],
+      },
+    }))
+  );
+
+  Addon.extract(dupAddon.toBuffer(), 'foo/bar').then(() => {
+    assert.fail('Invalid zip should not have succeeded');
+  }, (error) => {
+    assert.equal(
+      error.message,
+      'foo/bar/bar has more than one names',
+      'Addon should reject an invalid addon');
   });
 
   Addon.fetchGitHub('slack-rpg/addon-official').then((addon) => {
