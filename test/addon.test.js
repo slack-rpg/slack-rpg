@@ -38,13 +38,21 @@ test('Addon::extract', (assert) => {
   Addon.extract('foo', 'bar').then(() => {
     assert.fail('Invalid namespace should not have succeeded');
   }, (error) => {
-    assert.equal(error.message, 'Invalid or unrecognized namespace: bar', 'Addon should reject an invalid namespace');
+    assert.equal(
+      error.message,
+      'Invalid or unrecognized namespace: bar',
+      'Addon should reject an invalid namespace'
+    );
   });
 
   Addon.extract('foo', 'foo/bar').then(() => {
     assert.fail('Invalid zip should not have succeeded');
   }, (error) => {
-    assert.equal(error.message, 'Zip Error: Invalid filename', 'Addon should reject an invalid zip');
+    assert.equal(
+      error.message,
+      'Zip Error: Invalid filename',
+      'Addon should reject an invalid zip'
+    );
   });
 
   // Create an invalid addon zip file
@@ -53,13 +61,13 @@ test('Addon::extract', (assert) => {
   badAddon.addFile(
     'foo/bar/names.json',
     new Buffer(JSON.stringify({
-      'type': 'names',
-      'version': 'v1',
-      'data': {
-        'foo': 'bar', // <- invalid
-        'pre': [''],
-        'name': ['foo'],
-        'sur': [''],
+      type: 'names',
+      version: 'v1',
+      data: {
+        foo: 'bar', // <- invalid
+        pre: [''],
+        name: ['foo'],
+        sur: [''],
       },
     }))
   );
@@ -69,7 +77,8 @@ test('Addon::extract', (assert) => {
   }, (error) => {
     assert.equal(
       error.message,
-      'Validation Error: foo/bar/names.json - Schema Validation Errors:\nadditionalProperty "foo" exists in instance when not allowed',
+      'Validation Error: foo/bar/names.json - Schema Validation Errors:' +
+        '\nadditionalProperty "foo" exists in instance when not allowed',
       'Addon should reject an invalid addon');
   });
 
@@ -79,12 +88,12 @@ test('Addon::extract', (assert) => {
   dupAddon.addFile(
     'foo/bar/names1.json',
     new Buffer(JSON.stringify({
-      'type': 'names',
-      'version': 'v1',
-      'data': {
-        'pre': [''],
-        'name': ['foo'],
-        'sur': [''],
+      type: 'names',
+      version: 'v1',
+      data: {
+        pre: [''],
+        name: ['foo'],
+        sur: [''],
       },
     }))
   );
@@ -92,12 +101,12 @@ test('Addon::extract', (assert) => {
   dupAddon.addFile(
     'foo/bar/names2.json',
     new Buffer(JSON.stringify({
-      'type': 'names',
-      'version': 'v1',
-      'data': {
-        'pre': [''],
-        'name': ['foo'],
-        'sur': [''],
+      type: 'names',
+      version: 'v1',
+      data: {
+        pre: [''],
+        name: ['foo'],
+        sur: [''],
       },
     }))
   );
@@ -123,12 +132,31 @@ test('Addon::extract', (assert) => {
 });
 
 test('Addon::parse', (assert) => {
-  assert.deepEqual(Addon.parse(''), [], 'Empty string -> Empty Array');
-  assert.deepEqual(Addon.parse('foo/bar'), ['foo/bar'], 'Parse a single addon');
-  assert.deepEqual(Addon.parse('foo/bar,fizz/buzz'), ['foo/bar', 'fizz/buzz'], 'Parse multiple addons');
-  assert.deepEqual(Addon.parse('foo/bar,  fizz/buzz'), ['foo/bar', 'fizz/buzz'], 'Parse multiple addons with spaces');
+  assert.deepEqual(
+    Addon.parse(''), [], 'Empty string -> Empty Array');
+  assert.deepEqual(
+    Addon.parse('foo/bar'),
+    ['foo/bar'],
+    'Parse a single addon'
+  );
 
-  assert.throws(Addon.parse.bind(null, 'foo'), /Invalid Addon Name: foo/, 'Throw error on invalid addon');
+  assert.deepEqual(
+    Addon.parse('foo/bar,fizz/buzz'),
+    ['foo/bar', 'fizz/buzz'],
+    'Parse multiple addons'
+  );
+
+  assert.deepEqual(
+    Addon.parse('foo/bar,  fizz/buzz'),
+    ['foo/bar', 'fizz/buzz'],
+    'Parse multiple addons with spaces'
+  );
+
+  assert.throws(
+    Addon.parse.bind(null, 'foo'),
+    /Invalid Addon Name: foo/,
+    'Throw error on invalid addon'
+  );
 
   assert.end();
 });
@@ -151,7 +179,11 @@ test('Addon::fetch', (assert) => {
   Addon.fetch('parsefail').then(() => {
     assert.fail('Invalid repo should not have succeeded');
   }, (error) => {
-    assert.equal(error.message, 'Invalid Addon Name: parsefail', 'Addon should pass through parse errors');
+    assert.equal(
+      error.message,
+      'Invalid Addon Name: parsefail',
+      'Addon should pass through parse errors'
+    );
   });
 });
 

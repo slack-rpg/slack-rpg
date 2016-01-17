@@ -10,11 +10,35 @@ test('Game Master: Should parse dice commands', (assert) => {
   assert.deepEqual(gm.parseDice('2d10+3'), { num: 2, sides: 10, modifier: 3 }, 'Parse 2d10+3');
   assert.deepEqual(gm.parseDice('4d3-1'), { num: 4, sides: 3, modifier: -1 }, 'Parse 4d3-1');
 
-  assert.throws(gm.parseDice.bind(null), /Empty or Non\-String Dice Command/, 'Throw on null');
-  assert.throws(gm.parseDice.bind(null, {}), /Empty or Non\-String Dice Command/, 'Throw on object');
-  assert.throws(gm.parseDice.bind(null, '1d'), /Invalid Dice Command: 1d/, 'Throw missing sides');
-  assert.throws(gm.parseDice.bind(null, 'd4'), /Invalid Dice Command: d4/, 'Throw missing num');
-  assert.throws(gm.parseDice.bind(null, '1d4foo'), /Invalid Dice Command: 1d4foo/, 'Throw on invalid modifier');
+  assert.throws(
+    gm.parseDice.bind(null),
+    /Empty or Non\-String Dice Command/,
+    'Throw on null'
+  );
+
+  assert.throws(
+    gm.parseDice.bind(null, {}),
+    /Empty or Non\-String Dice Command/,
+    'Throw on object'
+  );
+
+  assert.throws(
+    gm.parseDice.bind(null, '1d'),
+    /Invalid Dice Command: 1d/,
+    'Throw missing sides'
+  );
+
+  assert.throws(
+    gm.parseDice.bind(null, 'd4'),
+    /Invalid Dice Command: d4/,
+    'Throw missing num'
+  );
+
+  assert.throws(
+    gm.parseDice.bind(null, '1d4foo'),
+    /Invalid Dice Command: 1d4foo/,
+    'Throw on invalid modifier'
+  );
 
   assert.end();
 });
@@ -23,8 +47,18 @@ test('Game Master: Should roll dice', (assert) => {
   const gm = new GameMaster('foo');
 
   assert.ok(gm.roll('1d4'), 'Roll a 1d4');
-  assert.throws(gm.roll.bind(gm), /Empty or Non\-String Dice Command/, 'Pass through dice parsing errors');
-  assert.throws(gm.roll.bind(gm, 'foo'), /Invalid Dice Command: foo/, 'Pass through dice parsing errors');
+
+  assert.throws(
+    gm.roll.bind(gm),
+    /Empty or Non\-String Dice Command/,
+    'Pass through dice parsing errors'
+  );
+
+  assert.throws(
+    gm.roll.bind(gm, 'foo'),
+    /Invalid Dice Command: foo/,
+    'Pass through dice parsing errors'
+  );
 
   assert.end();
 });
@@ -116,13 +150,21 @@ test('Game Master: Execute Commands', (assert) => {
   gm.command('foo').then(() => {
     assert.fail('Foo should not parse into a command');
   }, (error) => {
-    assert.equal(error.message, 'No commands found: undefined', 'Reject promise when no commands found.');
+    assert.equal(
+      error.message,
+      'No commands found: undefined',
+      'Reject promise when no commands found.'
+    );
   });
 
   gm.command('foo', 'foo').then(() => {
     assert.fail('Foo should not parse into a command');
   }, (error) => {
-    assert.equal(error.message, 'No commands found: foo', 'Reject promise when invalid commands found.');
+    assert.equal(
+      error.message,
+      'No commands found: foo',
+      'Reject promise when invalid commands found.'
+    );
   });
 });
 
@@ -158,4 +200,58 @@ test('Game Master: Execute Command Roll', (assert) => {
   }, (error) => {
     assert.fail(`Error parsing 'roll 2d4-1': ${error.message}`);
   });
+});
+
+const gm = new GameMaster('foo');
+
+gm.loadAddons('slack-rpg/addon-official').then(() => {
+  test('Game Master: Should get loaded namespaces', (assert) => {
+    assert.ok(gm.seeds.locations.data.names.pre.length > 0, 'locations.names.pre is populated');
+    assert.ok(gm.seeds.locations.data.names.name.length > 0, 'locations.names.name is populated');
+    assert.ok(gm.seeds.locations.data.names.sur.length > 0, 'locations.names.sur is populated');
+
+    assert.ok(gm.seeds.locations.data.descriptions.length > 0,
+      'locations.descriptions is populated');
+    assert.ok(gm.seeds.locations.data.adjectives.length > 0, 'locations.adjectives is populated');
+
+    assert.ok(gm.seeds.names.data.pre.length > 0, 'names.pre is populated');
+    assert.ok(gm.seeds.names.data.name.length > 0, 'names.name is populated');
+    assert.ok(gm.seeds.names.data.sur.length > 0, 'names.sur is populated');
+
+    assert.ok(Object.keys(gm.seeds.weapons.data.types).length > 0, 'weapons.types is populated');
+    assert.ok(Object.keys(gm.seeds.weapons.data.weapons).length > 0,
+      'weapons.weapons is populated');
+
+    assert.ok(Object.keys(gm.seeds.races.data).length > 0, 'races is populated');
+
+    assert.ok(Object.keys(gm.seeds.classes.data).length > 0, 'classes is populated');
+
+    assert.end();
+  });
+
+  test('Game Master: Generate random name', (assert) => {
+    // Generate a bunch of random names
+    const names = [
+      gm.generateName(gm.seeds.names.data),
+      gm.generateName(gm.seeds.names.data),
+      gm.generateName(gm.seeds.names.data),
+      gm.generateName(gm.seeds.names.data),
+      gm.generateName(gm.seeds.names.data),
+    ];
+
+    const uniqueName = names.reduce((prev, cur) => {
+      if (prev.indexOf(cur) < 0) {
+        prev.push(cur);
+      }
+
+      return prev;
+    }, []);
+
+    assert.ok(uniqueName.length > 0, 'Found some unique names');
+    assert.equal(uniqueName.length, uniqueName.length, 'All names are unique');
+
+    assert.end();
+  });
+}, (error) => {
+  throw error;
 });

@@ -42,6 +42,10 @@ test('Config: use env values over file values', (assert) => {
 });
 
 test('Config: throw an error if config is not an object', (assert) => {
-  assert.throws(Config.parse.bind(null, 'foo'), /Config is not an object/, 'Invalid objects should throw an error');
+  assert.throws(
+    Config.parse.bind(null, 'foo'),
+    /Config is not an object/,
+    'Invalid objects should throw an error'
+  );
   assert.end();
 });

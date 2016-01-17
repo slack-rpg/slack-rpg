@@ -1,5 +1,5 @@
 # Slack RPG
-[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)  [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master)
+[![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)  [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master) [![Stories in Ready](https://badge.waffle.io/slack-rpg/slack-rpg.svg?label=ready&title=Ready)](http://waffle.io/slack-rpg/slack-rpg)
 
 This slack bot will run an RPG inside your slack instance.
 
@@ -26,7 +26,8 @@ This slack bot will run an RPG inside your slack instance.
   - [Configuration Environment Variables](#configuration-environment-variables)
 
 - [Contributing](#contributing)
-<!-- /TOC -->
+- <!-- /TOC -->
+
 
 ## Features
 - Each Channel the bot is invited to will become a new location in the game.
