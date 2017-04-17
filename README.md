@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/slack-rpg/slack-rpg.png?label=ready&title=Ready)](https://waffle.io/slack-rpg/slack-rpg)
 # Slack RPG
 [![Build Status](https://travis-ci.org/slack-rpg/slack-rpg.svg)](https://travis-ci.org/slack-rpg/slack-rpg)  [![Coverage Status](https://coveralls.io/repos/slack-rpg/slack-rpg/badge.svg?branch=master&service=github)](https://coveralls.io/github/slack-rpg/slack-rpg?branch=master) [![Stories in Ready](https://badge.waffle.io/slack-rpg/slack-rpg.svg?label=ready&title=Ready)](http://waffle.io/slack-rpg/slack-rpg)
 
