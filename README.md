@@ -71,7 +71,7 @@ The bot will respond to the following commands:
 - _roll <dice>_: The bot will randomly roll the dice you specify and respond with the result.
 
 ## Install
-1. Clone this [repository](https://github.com/shaunburdick/slack-rpg.git)
+1. Clone this [repository](https://github.com/slack-rpg/slack-rpg.git)
 2. `npm install`
 3. Copy `./config.default.js` to `./config.js` and [fill it out](#configjs)
 4. `npm start`
